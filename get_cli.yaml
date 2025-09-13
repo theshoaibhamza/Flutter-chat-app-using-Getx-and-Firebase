@@ -1,0 +1,52 @@
+# GetX CLI Configuration
+# This file configures where GetX CLI will generate files
+
+# Default path for pages, controllers, bindings, etc.
+path: lib/Presentation
+
+# Structure configuration
+structure:
+  # Pages will be created in lib/Presentation/pages
+  pages: pages
+  # Controllers will be created in lib/Presentation/controllers  
+  controllers: controllers
+  # Bindings will be created in lib/Presentation/bindings
+  bindings: bindings
+  # Services will be created in lib/Presentation/services
+  services: services
+  # Models will be created in lib/Presentation/models
+  models: models
+  # Views will be created in lib/Presentation/views
+  views: views
+  # Widgets will be created in lib/Presentation/widgets
+  widgets: widgets
+  # Utils will be created in lib/Presentation/utils
+  utils: utils
+
+# File naming conventions
+file_name:
+  # Use snake_case for file names
+  pattern: snake
+  # Add .dart extension
+  extension: .dart
+
+# Import paths
+imports:
+  # Base import path for the project
+  base: lib
+  # Import path for pages
+  pages: lib/Presentation/pages
+  # Import path for controllers
+  controllers: lib/Presentation/controllers
+  # Import path for bindings
+  bindings: lib/Presentation/bindings
+  # Import path for services
+  services: lib/Presentation/services
+  # Import path for models
+  models: lib/Presentation/models
+  # Import path for views
+  views: lib/Presentation/views
+  # Import path for widgets
+  widgets: lib/Presentation/widgets
+  # Import path for utils
+  utils: lib/Presentation/utils 
