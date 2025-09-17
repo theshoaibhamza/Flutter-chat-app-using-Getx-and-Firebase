@@ -26,13 +26,36 @@ class ChatView extends GetView<ChatController> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(
-                "https://i.pravatar.cc/150?img=5", //
-              ),
+              backgroundColor: controller.isGroupChat 
+                  ? Colors.teal 
+                  : Colors.grey.shade300,
+              child: controller.isGroupChat
+                  ? Icon(Icons.group, color: Colors.white)
+                  : null,
+              backgroundImage: !controller.isGroupChat
+                  ? NetworkImage("https://i.pravatar.cc/150?img=5")
+                  : null,
             ),
             SizedBox(width: 10),
-
-            Text(controller.friendName),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.friendName,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  if (controller.isGroupChat)
+                    Text(
+                      'Group Chat',
+                      style: TextStyle(
+                        fontSize: 12, 
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -81,7 +104,10 @@ class ChatView extends GetView<ChatController> {
                             : CrossAxisAlignment.start,
                         children: [
                           Text(
-                            message['message'].toString(),
+                            controller.getDecryptedMessage(
+                              message['messageId'],
+                              message['message'],
+                            ),
                             style: TextStyle(
                               color: isMe ? Colors.white : Colors.black87,
                             ),

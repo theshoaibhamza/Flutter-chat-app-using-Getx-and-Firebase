@@ -52,20 +52,33 @@ class MychatsView extends GetView<MychatsController> {
             final String userName = (userMap['name']?.toString() ?? '');
             final String userEmail = (userMap['email']?.toString() ?? '');
 
+            // Handle display for group vs individual chats
+            final String displayName = chat.isGroup 
+                ? (chat.groupName ?? 'Group Chat') 
+                : userName;
+            final String displaySubtitle = chat.isGroup 
+                ? '${chat.users.length} members' 
+                : userEmail;
+
             return Card(
               child: ListTile(
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
-                leading: const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/150?img=12',
-                  ),
-                ),
-                title: MyText(text: userName),
+                leading: chat.isGroup 
+                    ? CircleAvatar(
+                        backgroundColor: Colors.teal,
+                        child: Icon(Icons.group, color: Colors.white),
+                      )
+                    : const CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          'https://i.pravatar.cc/150?img=12',
+                        ),
+                      ),
+                title: MyText(text: displayName),
                 subtitle: Text(
-                  userEmail,
+                  displaySubtitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -99,12 +112,13 @@ class MychatsView extends GetView<MychatsController> {
                 ),
                 onTap: () {
                   Map<String, dynamic> args = {
-                    "name": userName,
+                    "name": displayName,
                     "chatId": chat.chatId,
-                    "friendId": userId,
+                    "friendId": chat.isGroup ? null : userId,
+                    "isGroup": chat.isGroup,
                   };
 
-                  // Navigate to chat screen with friendId or chatId as needed
+                  // Navigate to chat screen
                   Get.toNamed('/chat', arguments: args);
                 },
               ),

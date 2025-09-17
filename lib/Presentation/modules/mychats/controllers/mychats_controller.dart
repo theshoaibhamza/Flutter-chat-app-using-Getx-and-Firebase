@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:internee_app3/Data/Models/chat.dart';
 import 'package:internee_app3/app/Services/firebase_provider.dart';
 import 'package:intl/intl.dart';
-
 import 'package:uuid/uuid.dart';
 
 class MychatsController extends GetxController {
@@ -56,6 +55,33 @@ class MychatsController extends GetxController {
         .collection('chats')
         .doc(chatId)
         .set(chat.toMap());
+
+    print("New chat created with id: $chatId");
+  }
+
+  Future<void> createGroupChat(List<String> frindsIds, String groupName) async {
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    frindsIds.add(currentUserId); // also add own id in friend ids
+
+    String chatId = const Uuid().v1();
+    Chat chat = Chat(
+      unRead: {currentUserId: 0},
+      //unRead: {currentUserId: 0, myFriendId: 0},
+      chatId: chatId,
+      createdBy: currentUserId,
+      time: DateFormat.jm().format(DateTime.now()),
+      users: frindsIds,
+      lastMessageId: "null-initially",
+    );
+
+    final Map<String, dynamic> data = {
+      ...chat.toMap(),
+      'groupName': groupName,
+      'isGroup': true,
+    };
+
+    await FirebaseFirestore.instance.collection('chats').doc(chatId).set(data);
 
     print("New chat created with id: $chatId");
   }

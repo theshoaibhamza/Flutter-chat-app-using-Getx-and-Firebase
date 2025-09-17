@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internee_app3/Data/Models/user_model.dart';
 import 'package:internee_app3/app/Services/firebase_provider.dart';
+import 'package:internee_app3/app/Services/encryption_service.dart';
 import 'package:internee_app3/app/Utils/throttler.dart';
 
 class SignupController extends GetxController {
@@ -35,11 +36,15 @@ class SignupController extends GetxController {
           passwordController.text,
         );
 
+        // Step 1: Generate encryption keys for the new user
+        final encryptionService = EncryptionService();
+        final publicKey = await encryptionService.generateAndStoreKeys();
+
         UserModel userModel = UserModel.instance;
 
         userModel.id = userCredential.user!.uid;
         userModel.email = userCredential.user!.email!;
-        userModel.publicKey = ""; // No encryption needed
+        userModel.publicKey = publicKey; // Store public key in Firestore
         userModel.name = nameController.text;
         userModel.lastLogin = DateTime.now();
 
